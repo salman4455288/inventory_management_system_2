@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- ✅ App Primary Theme Colors -->
+    <color name="colorPrimary">#0A84FF</color>         <!-- Main app accent (blue) -->
+    <color name="colorOnPrimary">#FFFFFF</color>       <!-- Text/icon color on primary -->
+    <color name="colorSecondary">#03DAC6</color>       <!-- Secondary accent (teal) -->
+    <color name="colorOnSecondary">#000000</color>     <!-- Text/icon on secondary -->
+    <color name="colorSurface">#FFFFFF</color>         <!-- Backgrounds (cards, sheets, etc.) -->
+    <color name="colorOnSurface">#1C1B1F</color>       <!-- Text/icons on surface -->
+
+    <!-- ✅ Bottom Navigation Colors -->
+    <color name="nav_background">#FFFFFF</color>       <!-- Background of Bottom Nav -->
+    <color name="nav_active">#0A84FF</color>           <!-- Active icon/text -->
+    <color name="nav_inactive">#9E9E9E</color>         <!-- Inactive icon/text -->
+    <color name="nav_active_indicator">#E3F2FD</color> <!-- Highlight for active indicator -->
+
+    <!-- ✅ Optional Elevation / Shadow -->
+    <color name="nav_shadow_light">#33000000</color>   <!-- Light shadow -->
+    <color name="nav_shadow_dark">#66000000</color>    <!-- Stronger shadow -->
+
+
+
+
+    <!-- ✅ General Purpose -->
+    <color name="teal_700">#00796B</color>   <!-- deep teal -->
+    <color name="gray">#9E9E9E</color>      <!-- medium neutral gray -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="teal_200">#03DAC5</color>
+    <color name="gray_light">#F5F5F5</color>
+    <color name="gray_dark">#212121</color>
+    <color name="red">#fcba03</color>
+
+
+</resources>

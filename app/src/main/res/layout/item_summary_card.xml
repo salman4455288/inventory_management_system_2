@@ -1,0 +1,44 @@
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    android:layout_weight="1"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="3dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/iconSummary"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_customer"
+            app:tint="@color/teal_700" />
+
+        <TextView
+            android:id="@+id/tvSummaryTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Customers"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvSummaryValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="124"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
