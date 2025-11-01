@@ -31,7 +31,7 @@
             <View
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:background="@color/teal_700"
+                android:background="@color/red"
                 android:elevation="4dp" />
 
         </FrameLayout>
