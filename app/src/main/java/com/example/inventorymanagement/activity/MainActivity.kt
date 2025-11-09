@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 .replace(R.id.fragment_container, selectedFragment)
                 .commit()
 
+
             true
         }
     }

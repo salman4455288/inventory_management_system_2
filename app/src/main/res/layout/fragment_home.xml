@@ -115,14 +115,12 @@
                             android:textSize="12sp"
                             android:textColor="#7A8A99" />
 
-
                         <ImageView
                             android:id="@+id/stock"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/stock_img"
-                            android:background="#4CAF50"
-                            />
+                            android:background="#4CAF50" />
 
                     </LinearLayout>
 
@@ -176,8 +174,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/package_img"
-                            android:background="#2196F3"
-                            />
+                            android:background="#2196F3" />
 
                     </LinearLayout>
 
@@ -235,14 +232,12 @@
                             android:textSize="12sp"
                             android:textColor="#7A8A99" />
 
-
                         <ImageView
                             android:id="@+id/warning_img"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/warning_img"
-                            android:background="#FF9800"
-                            />
+                            android:background="#FF9800" />
 
                     </LinearLayout>
 
@@ -291,15 +286,12 @@
                             android:textSize="12sp"
                             android:textColor="#7A8A99" />
 
-
-
                         <ImageView
                             android:id="@+id/money_img"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/money_img"
-                            android:background="#E53935"
-                            />
+                            android:background="#E53935" />
 
                     </LinearLayout>
 
@@ -359,13 +351,13 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal">
 
-
                         <ImageView
                             android:id="@+id/pos_img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/pos_img"
                             android:background="#4CAF50"
+                            android:layout_marginBottom="8dp"
                             tools:ignore="DuplicateIds" />
 
                         <TextView
@@ -392,7 +384,7 @@
                             android:layout_height="50dp"
                             android:src="@drawable/package_img"
                             android:background="#2196F3"
-                            />
+                            android:layout_marginBottom="8dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -453,6 +445,7 @@
                             android:layout_height="50dp"
                             android:src="@drawable/supplier_img"
                             android:background="#FF9800"
+                            android:layout_marginBottom="8dp"
                             tools:ignore="DuplicateIds" />
 
                         <TextView
@@ -473,13 +466,13 @@
                         android:orientation="vertical"
                         android:gravity="center_horizontal">
 
-
                         <ImageView
                             android:id="@+id/report_img"
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:src="@drawable/report_img"
                             android:background="#673AB7"
+                            android:layout_marginBottom="8dp"
                             tools:ignore="DuplicateIds" />
 
                         <TextView
@@ -506,7 +499,7 @@
                             android:layout_height="50dp"
                             android:src="@drawable/money_img"
                             android:background="#E53935"
-                            />
+                            android:layout_marginBottom="8dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -555,160 +548,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <!-- Bottom Navigation Bar -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:gravity="center_vertical"
-        android:elevation="8dp">
-
-        <!-- Home Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Home"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-        <!-- POS Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="POS"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-        <!-- Inventory Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Inventory"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-        <!-- Customers Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Customers"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-        <!-- Reports Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Reports"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-        <!-- Settings Nav -->
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="?selectableItemBackground">
-
-            <View
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="#7A8A99"
-                android:layout_marginBottom="2dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Settings"
-                android:textSize="10sp"
-                android:textColor="#7A8A99" />
-
-        </LinearLayout>
-
-    </LinearLayout>
 
 </LinearLayout>
