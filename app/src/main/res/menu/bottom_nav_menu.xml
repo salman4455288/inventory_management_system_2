@@ -1,28 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item
         android:id="@+id/nav_home"
-        android:icon="@drawable/ic_home"
+        android:icon="@android:drawable/ic_menu_compass"
         android:title="Home" />
 
     <item
         android:id="@+id/nav_pos"
-        android:icon="@drawable/ic_pos"
+        android:icon="@android:drawable/ic_menu_sort_by_size"
         android:title="POS" />
 
     <item
         android:id="@+id/nav_inventory"
-        android:icon="@drawable/ic_inventory"
+        android:icon="@android:drawable/ic_menu_view"
         android:title="Inventory" />
 
     <item
         android:id="@+id/nav_customers"
-        android:icon="@drawable/ic_customer"
+        android:icon="@android:drawable/ic_menu_myplaces"
         android:title="Customers" />
 
     <item
         android:id="@+id/nav_reports"
-        android:icon="@drawable/ic_reports"
+        android:icon="@android:drawable/ic_menu_agenda"
         android:title="Reports" />
-
 </menu>
