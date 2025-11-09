@@ -1,13 +1,16 @@
 package com.example.inventorymanagement.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inventorymanagement.R
+import com.example.inventorymanagement.activity.AddProductActivity
 import com.example.inventorymanagement.adapter.InventoryAdapter
 import com.example.inventorymanagement.dataclass.Product
 
@@ -22,7 +25,11 @@ class InventoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_inventory, container, false)
-
+        val addproductact=view.findViewById<LinearLayout>(R.id.btnAddProduct)
+        addproductact.setOnClickListener {
+            val intent= Intent(context, AddProductActivity::class.java)
+            startActivity(intent)
+        }
         recyclerView = view.findViewById(R.id.recyclerInventory)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
@@ -36,6 +43,8 @@ class InventoryFragment : Fragment() {
 
         return view
     }
+
+    private fun findViewById(btnAddProduct: Int) {}
 
     companion object {
         @JvmStatic
