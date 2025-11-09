@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settings_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F5F5F5"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <!-- SETTINGS HEADER -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:text="Settings"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="#1F2937"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnSaveChanges"
+                android:text="Save Changes"
+                android:backgroundTint="#9CA3AF"
+                android:textColor="#FFFFFF"
+                android:textAllCaps="false"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="12dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cornerRadius="24dp" />
+        </LinearLayout>
+
+
+        <!-- BUSINESS INFORMATION -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Business Information"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1F2937"
+                    android:layout_marginBottom="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Button
+                    android:id="@+id/btnUploadLogo"
+                    android:text="Upload Logo"
+                    android:drawableLeft="@drawable/ic_inventory"
+                    android:drawablePadding="8dp"
+                    android:backgroundTint="#F3F4F6"
+                    android:textColor="#4B5563"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    app:cornerRadius="8dp" />
+
+                <TextView
+                    android:text="Recommended: 200x200 PNG or JPG"
+                    android:textSize="12sp"
+                    android:textColor="#6B7280"
+                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <!-- Business Name -->
+                <TextView
+                    android:text="Business Name"
+                    android:textSize="13sp"
+                    android:textColor="#374151"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:hint="RetailPOS Store"
+                    android:textColorHint="#9CA3AF"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="14dp"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Address -->
+                <TextView
+                    android:text="Address"
+                    android:textSize="13sp"
+                    android:textColor="#374151"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:hint="123 Main Street, City, State 12345"
+                    android:textColorHint="#9CA3AF"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="14dp"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Phone and Email Row -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Phone"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:hint="+1 (555) 123-4567"
+                            android:textColorHint="#9CA3AF"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:padding="14dp"
+                            android:background="@drawable/edittext_background"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <Space android:layout_width="12dp" android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Email"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:hint="store@retailpos.com"
+                            android:textColorHint="#9CA3AF"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:inputType="textEmailAddress"
+                            android:padding="14dp"
+                            android:background="@drawable/edittext_background"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Website and Tax ID Row -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Website"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:hint="www.retailpos.com"
+                            android:textColorHint="#9CA3AF"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:padding="14dp"
+                            android:background="@drawable/edittext_background"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                    <Space android:layout_width="12dp" android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Tax ID"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:hint="TAX12345678"
+                            android:textColorHint="#9CA3AF"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:padding="14dp"
+                            android:background="@drawable/edittext_background"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- USER SETTINGS -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="User Settings"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1F2937"
+                    android:layout_marginBottom="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <!-- Full Name -->
+                <TextView
+                    android:text="Full Name"
+                    android:textSize="13sp"
+                    android:textColor="#374151"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:hint="Admin User"
+                    android:textColorHint="#9CA3AF"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:padding="14dp"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Email -->
+                <TextView
+                    android:text="Email"
+                    android:textSize="13sp"
+                    android:textColor="#374151"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:hint="admin@retailpos.com"
+                    android:textColorHint="#9CA3AF"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:inputType="textEmailAddress"
+                    android:padding="14dp"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <!-- Role and Language -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:weightSum="2">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Role"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <Spinner
+                            android:background="@drawable/spinner_background"
+                            android:padding="14dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/roles"
+                            android:popupBackground="#FFFFFF" />
+                    </LinearLayout>
+
+                    <Space android:layout_width="12dp" android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Language"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <Spinner
+                            android:background="@drawable/spinner_background"
+                            android:padding="14dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/languages"
+                            android:popupBackground="#FFFFFF" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- SYSTEM SETTINGS -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="System Settings"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1F2937"
+                    android:layout_marginBottom="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <!-- Currency and Tax Rate -->
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Currency"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <Spinner
+                            android:background="@drawable/spinner_background"
+                            android:padding="14dp"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:entries="@array/currencies"
+                            android:popupBackground="#FFFFFF" />
+                    </LinearLayout>
+
+                    <Space android:layout_width="12dp" android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Tax Rate (%)"
+                            android:textSize="13sp"
+                            android:textColor="#374151"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <EditText
+                            android:hint="8.5"
+                            android:text="8.5"
+                            android:textColorHint="#9CA3AF"
+                            android:textColor="#1F2937"
+                            android:textSize="14sp"
+                            android:inputType="numberDecimal"
+                            android:padding="14dp"
+                            android:background="@drawable/edittext_background"
+                            android:layout_marginTop="6dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- Low Stock Threshold -->
+                <TextView
+                    android:text="Low Stock Threshold"
+                    android:textSize="13sp"
+                    android:textColor="#374151"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <EditText
+                    android:hint="10"
+                    android:text="10"
+                    android:textColorHint="#9CA3AF"
+                    android:textColor="#1F2937"
+                    android:textSize="14sp"
+                    android:inputType="number"
+                    android:padding="14dp"
+                    android:background="@drawable/edittext_background"
+                    android:layout_marginTop="6dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <Switch
+                    android:text="Auto Backup"
+                    android:textColor="#374151"
+                    android:textSize="14sp"
+                    android:checked="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Switch
+                    android:text="Notifications"
+                    android:textColor="#374151"
+                    android:textSize="14sp"
+                    android:checked="true"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Switch
+                    android:text="Sound Effects"
+                    android:textColor="#374151"
+                    android:textSize="14sp"
+                    android:checked="false"
+                    android:layout_marginTop="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- PRINTER SETTINGS -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Printer Settings"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1F2937"
+                    android:layout_marginBottom="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content" />
+
+                <Spinner
+                    android:background="@drawable/spinner_background"
+                    android:padding="14dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/printers"
+                    android:popupBackground="#FFFFFF" />
+
+                <Switch
+                    android:text="Enable Receipt Printing"
+                    android:textColor="#374151"
+                    android:textSize="14sp"
+                    android:checked="true"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- ACCOUNT ACTIONS -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="20dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:padding="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:text="Account Actions"
+                    android:textStyle="bold"
+                    android:textSize="18sp"
+                    android:textColor="#1F2937"
+                    android:layout_marginBottom="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"/>
+
+                <Button
+                    android:id="@+id/btnChangePassword"
+                    android:text="Change Password"
+                    android:textColor="#374151"
+                    android:textAllCaps="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:backgroundTint="#F3F4F6"
+                    app:cornerRadius="8dp"/>
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:text="Logout"
+                    android:textColor="#FFFFFF"
+                    android:textAllCaps="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:backgroundTint="#EF4444"
+                    app:cornerRadius="8dp"/>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+</ScrollView>

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="#F5F5F5">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <!-- Header -->
@@ -41,7 +41,7 @@
                 android:paddingRight="16dp"
                 android:clickable="true"
                 android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless">  <!-- adds ripple effect -->
+                android:foreground="?attr/selectableItemBackgroundBorderless">
 
                 <ImageView
                     android:layout_width="20dp"
@@ -55,12 +55,8 @@
                     android:layout_height="wrap_content"
                     android:text="Add Manually"
                     android:textColor="#000000"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
-
+                    android:textSize="14sp" />
             </LinearLayout>
-
-
         </LinearLayout>
 
         <!-- Barcode Scanner Card -->
@@ -89,6 +85,7 @@
                     android:orientation="vertical"
                     android:background="#80000000"
                     android:padding="8dp">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
@@ -99,13 +96,11 @@
                             android:layout_height="120dp"
                             android:layout_marginTop="40dp"
                             android:background="@drawable/barcode_outline"
-                            android:layout_centerInParent="true"
-                            />
+                            android:layout_centerInParent="true" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:text="Position barcode here"
                             android:layout_centerInParent="true"
                             android:textColor="@android:color/white"
@@ -127,9 +122,7 @@
                             android:textAllCaps="false"
                             android:textColor="@android:color/white"
                             android:textSize="12sp" />
-
                     </RelativeLayout>
-
                 </LinearLayout>
             </FrameLayout>
         </androidx.cardview.widget.CardView>
@@ -170,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
-                android:text="Discount/Tax"
+                android:text="Discount / Tax"
                 android:textColor="#333333"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -179,14 +172,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cartRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_margin="0dp"
-            android:clipToPadding="false"
-            />
+            android:layout_height="wrap_content"
+            android:clipToPadding="false" />
 
-        <!-- Totals -->
+        <!-- Totals + Checkout -->
         <LinearLayout
+            android:id="@+id/bottom_end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/white"
@@ -194,6 +185,7 @@
             android:padding="16dp"
             android:elevation="4dp">
 
+            <!-- Subtotal -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -211,11 +203,12 @@
                     android:id="@+id/tvSubtotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$13.24"
+                    android:text="Rs. 13,240"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
 
+            <!-- Tax -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -234,7 +227,7 @@
                     android:id="@+id/tvTax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$1.13"
+                    android:text="Rs. 1,123"
                     android:textColor="#333333"
                     android:textSize="14sp" />
             </LinearLayout>
@@ -245,6 +238,7 @@
                 android:layout_marginVertical="8dp"
                 android:background="#E0E0E0" />
 
+            <!-- Total -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -263,12 +257,25 @@
                     android:id="@+id/tvTotal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="$14.37"
+                    android:text="Rs. 14,363"
                     android:textColor="#000000"
                     android:textSize="16sp"
                     android:textStyle="bold" />
             </LinearLayout>
-        </LinearLayout>
 
+            <!-- Checkout Button -->
+            <Button
+                android:id="@+id/btnCheckout"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="12dp"
+                android:backgroundTint="#1E1E1E"
+                android:text="Checkout"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:elevation="2dp" />
+        </LinearLayout>
     </LinearLayout>
-</FrameLayout>
+</ScrollView>

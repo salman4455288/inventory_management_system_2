@@ -47,18 +47,14 @@
             </LinearLayout>
 
             <!-- Menu Button -->
-            <FrameLayout
+            <LinearLayout
+                android:id="@+id/settings_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:background="@drawable/menu_button_background">
-
-                <View
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="#000000"
-                    android:elevation="2dp" />
-
-            </FrameLayout>
+                android:background="@drawable/ic_settings"
+                android:tint="@color/black"
+                android:backgroundTint="@color/black"
+                />
 
         </LinearLayout>
 
