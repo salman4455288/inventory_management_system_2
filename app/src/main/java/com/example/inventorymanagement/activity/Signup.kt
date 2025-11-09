@@ -18,7 +18,7 @@ class Signup : AppCompatActivity() {
         val createaccount= findViewById<Button>(R.id.create_account_button)
 
         createaccount.setOnClickListener {
-            val intent = android.content.Intent(this, Dashboard::class.java)
+            val intent = android.content.Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
 

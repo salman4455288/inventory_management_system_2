@@ -66,7 +66,7 @@
         <!-- Barcode Scanner Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="150dp"
             android:layout_margin="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
@@ -181,9 +181,9 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:layout_margin="8dp"
+            android:layout_margin="0dp"
             android:clipToPadding="false"
-            android:paddingBottom="8dp" />
+            />
 
         <!-- Totals -->
         <LinearLayout

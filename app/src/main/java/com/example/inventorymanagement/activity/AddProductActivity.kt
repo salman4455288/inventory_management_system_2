@@ -10,6 +10,7 @@ import com.example.inventorymanagement.R
 
 class AddProductActivity : AppCompatActivity() {
 
+    private lateinit var btnBack: ImageView
     private lateinit var imgProduct: ImageView
     private lateinit var btnChooseImage: Button
     private lateinit var etProductName: EditText
@@ -19,11 +20,6 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var btnScanBarcode: ImageView
     private lateinit var spinnerCategory: Spinner
     private lateinit var etDescription: EditText
-    private lateinit var etCostPrice: EditText
-    private lateinit var etSellingPrice: EditText
-    private lateinit var etCurrentStock: EditText
-    private lateinit var etMinStock: EditText
-    private lateinit var spinnerSupplier: Spinner
     private lateinit var btnSaveProduct: Button
     private lateinit var btnCancel: Button
 
@@ -32,6 +28,7 @@ class AddProductActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_product)
 
         // Initialize views
+        btnBack = findViewById(R.id.btnBack)
         imgProduct = findViewById(R.id.imgProduct)
         btnChooseImage = findViewById(R.id.btnChooseImage)
         etProductName = findViewById(R.id.etProductName)
@@ -41,17 +38,17 @@ class AddProductActivity : AppCompatActivity() {
         btnScanBarcode = findViewById(R.id.btnScanBarcode)
         spinnerCategory = findViewById(R.id.spinnerCategory)
         etDescription = findViewById(R.id.etDescription)
-        etCostPrice = findViewById(R.id.etCostPrice)
-        etSellingPrice = findViewById(R.id.etSellingPrice)
-        etCurrentStock = findViewById(R.id.etCurrentStock)
-        etMinStock = findViewById(R.id.etMinStock)
-        spinnerSupplier = findViewById(R.id.spinnerSupplier)
         btnSaveProduct = findViewById(R.id.btnSaveProduct)
         btnCancel = findViewById(R.id.btnCancel)
 
         // Set click listeners
+        btnBack.setOnClickListener {
+            finish()
+        }
+
         btnChooseImage.setOnClickListener {
             // Handle image selection
+            // TODO: Implement image picker
         }
 
         btnGenerate.setOnClickListener {
@@ -62,15 +59,51 @@ class AddProductActivity : AppCompatActivity() {
 
         btnScanBarcode.setOnClickListener {
             // Handle barcode scanning
+            // TODO: Implement barcode scanner
         }
 
         btnSaveProduct.setOnClickListener {
-            // Save product
-            finish()
+            // Validate and save product
+            if (validateInputs()) {
+                saveProduct()
+            }
         }
 
         btnCancel.setOnClickListener {
             finish()
         }
+    }
+
+    private fun validateInputs(): Boolean {
+        if (etProductName.text.toString().trim().isEmpty()) {
+            etProductName.error = "Product name is required"
+            return false
+        }
+
+        if (etSku.text.toString().trim().isEmpty()) {
+            etSku.error = "SKU is required"
+            return false
+        }
+
+        if (spinnerCategory.selectedItemPosition == 0) {
+            // Assuming first position is placeholder
+            // Show error for category selection
+            return false
+        }
+
+        return true
+    }
+
+    private fun saveProduct() {
+        // TODO: Implement save logic
+        // Get values from all fields
+        val productName = etProductName.text.toString().trim()
+        val sku = etSku.text.toString().trim()
+        val barcode = etBarcode.text.toString().trim()
+        val description = etDescription.text.toString().trim()
+
+        // Save to database or send to API
+
+        finish()
     }
 }
