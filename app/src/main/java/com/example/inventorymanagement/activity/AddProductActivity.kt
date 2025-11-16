@@ -24,6 +24,7 @@ class AddProductActivity : AppCompatActivity() {
     private lateinit var etDescription: EditText
     private lateinit var etCostPrice: EditText
     private lateinit var etSellingPrice: EditText
+
     private lateinit var etCurrentStock: EditText
     private lateinit var etMinStock: EditText
     private lateinit var spinnerSupplier: Spinner
