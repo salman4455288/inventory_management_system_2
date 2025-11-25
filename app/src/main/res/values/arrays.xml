@@ -1,0 +1,33 @@
+<resources>
+    <!-- User Roles -->
+    <string-array name="roles">
+        <item>Admin</item>
+        <item>Manager</item>
+        <item>Cashier</item>
+        <item>Staff</item>
+    </string-array>
+
+    <!-- App Languages -->
+    <string-array name="languages">
+        <item>English</item>
+        <item>Urdu</item>
+        <item>Arabic</item>
+        <item>French</item>
+    </string-array>
+
+    <!-- Supported Currencies -->
+    <string-array name="currencies">
+        <item>PKR - Pakistani Rupee</item>
+        <item>USD - US Dollar</item>
+        <item>EUR - Euro</item>
+        <item>GBP - British Pound</item>
+    </string-array>
+
+    <!-- Printer Types -->
+    <string-array name="printers">
+        <item>Thermal Printer</item>
+        <item>Laser Printer</item>
+        <item>Bluetooth Printer</item>
+        <item>USB Printer</item>
+    </string-array>
+</resources>
