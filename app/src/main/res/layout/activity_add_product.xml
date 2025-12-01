@@ -95,7 +95,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:layout_marginTop="16dp"
-                            android:background="@drawable/rounded_gray_button"
+                            android:background="@color/nav_shadow_dark"
                             android:paddingHorizontal="20dp"
                             android:text="Choose Image"
                             android:textAllCaps="false"

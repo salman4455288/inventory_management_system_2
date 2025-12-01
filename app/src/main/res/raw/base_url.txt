@@ -1,0 +1,1 @@
+http://10.170.93.188/inventory_api/
