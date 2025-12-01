@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/add_productPage"
     android:background="#F9FAFB"
     android:orientation="vertical">
 
-    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -45,7 +45,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Product Image Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -105,7 +104,6 @@
                 </FrameLayout>
             </LinearLayout>
 
-            <!-- Basic Information Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -123,7 +121,6 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <!-- Product Name -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -143,7 +140,6 @@
                     android:paddingRight="12dp"
                     android:textSize="14sp" />
 
-                <!-- SKU -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -184,7 +180,6 @@
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <!-- Barcode -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -220,7 +215,6 @@
                         android:src="@android:drawable/ic_menu_camera" />
                 </LinearLayout>
 
-                <!-- Category -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -229,16 +223,39 @@
                     android:textColor="#374151"
                     android:textSize="12sp" />
 
-                <Spinner
-                    android:id="@+id/spinnerCategory"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_edittext_bg"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp" />
+                    android:orientation="horizontal">
 
-                <!-- Description -->
+                    <AutoCompleteTextView
+                        android:id="@+id/actvCategory"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:completionThreshold="1"
+                        android:hint="Select or type category"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btnAddCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/rounded_gray_button"
+                        android:minWidth="0dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="Add"
+                        android:textAllCaps="false"
+                        android:textColor="#111827"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -261,7 +278,6 @@
                     android:textSize="14sp" />
             </LinearLayout>
 
-            <!-- Pricing Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -279,14 +295,12 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <!-- Cost Price and Selling Price Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
-                    <!-- Cost Price -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -314,7 +328,6 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <!-- Selling Price -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -344,7 +357,6 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- Inventory Section -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -362,14 +374,12 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <!-- Current Stock and Minimum Stock Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="horizontal">
 
-                    <!-- Current Stock -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -397,7 +407,6 @@
                             android:textSize="14sp" />
                     </LinearLayout>
 
-                    <!-- Minimum Stock -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -426,7 +435,6 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <!-- Supplier -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -435,19 +443,43 @@
                     android:textColor="#374151"
                     android:textSize="12sp" />
 
-                <Spinner
-                    android:id="@+id/spinnerSupplier"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/rounded_edittext_bg"
-                    android:paddingLeft="12dp"
-                    android:paddingRight="12dp" />
+                    android:orientation="horizontal">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/actvSupplier"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:completionThreshold="1"
+                        android:hint="Select or type supplier"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp"
+                        android:textSize="14sp" />
+
+                    <Button
+                        android:id="@+id/btnAddSupplier"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="8dp"
+                        android:background="@drawable/rounded_gray_button"
+                        android:minWidth="0dp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp"
+                        android:text="Add"
+                        android:textAllCaps="false"
+                        android:textColor="#111827"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Buttons -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

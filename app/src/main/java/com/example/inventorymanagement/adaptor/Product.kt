@@ -1,6 +1,6 @@
 package com.example.inventorymanagement.dataclass
 
-data class Product(
+data class roduct(
     val name: String,
     val sku: String,
     val category: String,

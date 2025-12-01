@@ -90,8 +90,7 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Category Tabs -->
-        <!-- Category Buttons Section -->
+        <!-- DYNAMIC CATEGORY TABS -->
         <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -99,74 +98,22 @@
             android:paddingBottom="12dp"
             android:scrollbars="none">
 
+            <!-- Added ID here to insert buttons programmatically -->
             <LinearLayout
+                android:id="@+id/llCategoryContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btnAllCategories"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="#000000"
-                    android:paddingHorizontal="18dp"
-                    android:text="All Categories"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp" />
+                <!-- Buttons will be added here by Kotlin code -->
 
-                <Button
-                    android:id="@+id/btnBeverages"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="#E0E0E0"
-                    android:paddingHorizontal="18dp"
-                    android:text="Beverages"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/btnSnacks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="#E0E0E0"
-                    android:paddingHorizontal="18dp"
-                    android:text="Snacks"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/btnDairy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="#E0E0E0"
-                    android:paddingHorizontal="18dp"
-                    android:text="Dairy"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="13sp" />
-
-                <Button
-                    android:id="@+id/btnBakery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="38dp"
-                    android:backgroundTint="#E0E0E0"
-                    android:paddingHorizontal="18dp"
-                    android:text="Bakery"
-                    android:textAllCaps="false"
-                    android:textColor="#000000"
-                    android:textSize="13sp" />
             </LinearLayout>
         </HorizontalScrollView>
 
-        <!-- Low Stock Alert -->
+        <!-- DYNAMIC LOW STOCK ALERT -->
+        <!-- Added ID and Visibility GONE by default -->
         <LinearLayout
+            android:id="@+id/cardLowStockAlert"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
@@ -176,7 +123,8 @@
             android:orientation="vertical"
             android:padding="12dp"
             android:elevation="2dp"
-            android:clipToOutline="true">
+            android:clipToOutline="true"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -200,11 +148,13 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- Added ID for dynamic text -->
             <TextView
+                android:id="@+id/tvLowStockMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="3 product(s) are running low on stock"
+                android:text="Loading alerts..."
                 android:textColor="#666666"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -214,7 +164,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-
             android:orientation="horizontal">
 
             <!-- Total Products -->
@@ -240,8 +189,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:text="5"
+                    android:id="@+id/tvTotalProducts"
+                    android:text="0"
                     android:textColor="#000000"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -278,8 +227,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-
-                    android:text="3"
+                    android:id="@+id/tvLowStock"
+                    android:text="0"
                     android:textColor="#000000"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -312,9 +261,10 @@
                     androidx:tint="#4CAF50" />
 
                 <TextView
+                    android:id="@+id/tvTotalCategories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5"
+                    android:text="0"
                     android:textColor="#000000"
                     android:textSize="20sp"
                     android:textStyle="bold" />
