@@ -29,17 +29,31 @@ import java.net.URLEncoder
 
 class Login : AppCompatActivity() {
 
-    // Inside Login.kt or MainActivity.kt
-   // private val  = "http://10.170.93.188/inventory_api/"
-    lateinit var  BASE_URL : String
+    private lateinit var BASE_URL: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // --- 1. SESSION CHECK (Add this block at the very top) ---
+        // Check if user is already logged in before loading the view
+        val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
+        val token = sharedPref.getString("api_token", null)
+
+        if (token != null) {
+            // User has a token, skip login screen
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish() // Close Login activity so they can't go back to it
+            return // Stop the rest of onCreate
+        }
+        // ---------------------------------------------------------
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
+
+        // Initialize Base URL
         BASE_URL = BaseURL.getUrl(this)
 
-        // Apply Window Insets (from your code)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.loginPage)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -74,7 +88,6 @@ class Login : AppCompatActivity() {
             profileImage.isClickable = true
             profileImage.setOnClickListener {
                 Toast.makeText(this, "Tap to upload profile picture", Toast.LENGTH_SHORT).show()
-                // TODO: Implement Image Picker for Picasso later
             }
         }
 
@@ -136,8 +149,6 @@ class Login : AppCompatActivity() {
         }
     }
 
-    // --- NETWORKING FUNCTIONS ---
-
     private fun performLogin(emailPhone: String, pass: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -186,14 +197,13 @@ class Login : AppCompatActivity() {
             if (!json.getBoolean("error")) {
                 Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
 
-                // Save User Session for future Picasso/Data usage
+                // Save User Session
                 val user = json.getJSONObject("user")
                 val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
                 with (sharedPref.edit()) {
                     putInt("user_id", user.getInt("id"))
                     putString("full_name", user.getString("full_name"))
                     putString("api_token", user.getString("api_token"))
-                    // Save image path for Picasso usage in MainActivity
                     if(user.has("profile_image") && !user.isNull("profile_image")) {
                         putString("profile_image", user.getString("profile_image"))
                     }
@@ -216,7 +226,6 @@ class Login : AppCompatActivity() {
             val json = JSONObject(response)
             if (!json.getBoolean("error")) {
                 Toast.makeText(this, "Account Created! Please Login.", Toast.LENGTH_SHORT).show()
-                // Switch back to login tab programmatically or let user do it
                 findViewById<LinearLayout>(R.id.card_signup_container).visibility = View.GONE
                 findViewById<LinearLayout>(R.id.card_login_container).visibility = View.VISIBLE
             } else {
