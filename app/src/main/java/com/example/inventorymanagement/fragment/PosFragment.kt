@@ -277,7 +277,7 @@ class PosFragment : Fragment() {
             // 2. CHECK INTERNET INSTANTLY
             if (!isOnline()) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "No Internet. Saved Offline!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "No  Internet. Saved Offline!", Toast.LENGTH_SHORT).show()
                     clearCart()
                     scheduleSync() // Mark for background sync
                 }
