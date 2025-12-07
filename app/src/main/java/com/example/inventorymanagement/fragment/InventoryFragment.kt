@@ -20,12 +20,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.inventorymanagement.InventoryApp
 import com.example.inventorymanagement.R
 import com.example.inventorymanagement.activity.AddProductActivity
 import com.example.inventorymanagement.adapter.InventoryAdapter
 import com.example.inventorymanagement.dataclass.Product
 import com.example.inventorymanagement.util.BaseURL
-import com.example.inventorymanagement.util.NotificationHelper // Import NotificationHelper
+import com.example.inventorymanagement.util.NotificationHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,11 +44,14 @@ class InventoryFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: InventoryAdapter
 
-    // Two lists: Master list (all data) and Display list (filtered data)
+    // We no longer rely solely on memory lists; we lean on the Database
     private var allProducts = mutableListOf<Product>()
     private var displayedProducts = mutableListOf<Product>()
 
     private val BASE_URL: String by lazy { BaseURL.getUrl(requireContext()) }
+
+    // Database Reference
+    private val inventoryDao by lazy { (requireActivity().application as InventoryApp).database.inventoryDao() }
 
     // Dashboard Views
     private lateinit var tvTotalProducts: TextView
@@ -56,11 +60,8 @@ class InventoryFragment : Fragment() {
     private lateinit var cardLowStockAlert: LinearLayout
     private lateinit var tvLowStockMessage: TextView
     private lateinit var llCategoryContainer: LinearLayout
-
-    // Search
     private lateinit var etSearchBar: EditText
 
-    // Track selected filter button
     private var selectedCategoryButton: Button? = null
 
     override fun onCreateView(
@@ -68,13 +69,10 @@ class InventoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_inventory, container, false)
-
         initViews(view)
 
-        // Setup Recycler
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // Initialize Adapter
         adapter = InventoryAdapter(displayedProducts) { product ->
             showUpdateStockDialog(product)
         }
@@ -82,8 +80,6 @@ class InventoryFragment : Fragment() {
 
         setupSearchBar()
 
-        // Add Product Button Logic
-        // FIXED: Changed <LinearLayout> to <View> because it is a MaterialCardView in XML
         val btnAddProduct = view.findViewById<View>(R.id.btnAddProduct)
         btnAddProduct.setOnClickListener {
             val intent = Intent(context, AddProductActivity::class.java)
@@ -106,8 +102,23 @@ class InventoryFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        // Refresh data whenever the screen appears
-        fetchProducts()
+        // 1. Load Local Data FIRST (Instant)
+        loadFromLocalDatabase()
+        // 2. Then try to Sync with Server (Background)
+        fetchProductsFromServer()
+    }
+
+    // --- NEW: OFFLINE FIRST LOGIC ---
+    private fun loadFromLocalDatabase() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val localList = inventoryDao.getAllProducts()
+
+            withContext(Dispatchers.Main) {
+                if (localList.isNotEmpty()) {
+                    updateUI(localList)
+                }
+            }
+        }
     }
 
     // --- SEARCH LOGIC ---
@@ -126,9 +137,6 @@ class InventoryFragment : Fragment() {
         if (query.isEmpty()) {
             displayedProducts.addAll(allProducts)
         } else {
-            // Deselect category tabs when searching
-            // (Assuming style logic handled in generateCategoryTabs click listener)
-
             val lowerCaseQuery = query.lowercase()
             val filteredList = allProducts.filter { product ->
                 product.name.lowercase().contains(lowerCaseQuery) ||
@@ -166,8 +174,6 @@ class InventoryFragment : Fragment() {
             val newQtyStr = input.text.toString().trim()
             if (newQtyStr.isNotEmpty()) {
                 updateStockInServer(product.id, newQtyStr.toInt())
-            } else {
-                Toast.makeText(context, "Quantity cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
         builder.setNegativeButton("Cancel") { dialog, _ -> dialog.dismiss() }
@@ -200,20 +206,24 @@ class InventoryFragment : Fragment() {
                     try {
                         val json = JSONObject(response)
                         if (!json.getBoolean("error")) {
-                            Toast.makeText(context, "Stock Updated Successfully!", Toast.LENGTH_SHORT).show()
-                            fetchProducts()
+                            Toast.makeText(context, "Stock Updated!", Toast.LENGTH_SHORT).show()
+                            fetchProductsFromServer() // Refresh
                         } else {
                             Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show()
                         }
                     } catch (e: Exception) { e.printStackTrace() }
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) { Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show() }
+                withContext(Dispatchers.Main) {
+                    // OFFLINE LOGIC: We should ideally update local DB here too,
+                    // but for simplicity, we just show error
+                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
 
-    private fun fetchProducts() {
+    private fun fetchProductsFromServer() {
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val apiToken = sharedPref.getString("api_token", "") ?: ""
 
@@ -231,19 +241,21 @@ class InventoryFragment : Fragment() {
 
                 val response = conn.inputStream.bufferedReader().readText()
 
-                withContext(Dispatchers.Main) {
-                    parseProductResponse(response)
-                }
+                // Parse and Save to DB
+                parseAndSaveResponse(response)
 
-            } catch (e: Exception) { e.printStackTrace() }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                // If network fails, we do nothing because we already loaded local data in onResume
+            }
         }
     }
 
-    private fun parseProductResponse(response: String) {
+    private suspend fun parseAndSaveResponse(response: String) {
         try {
             val json = JSONObject(response)
             if (!json.getBoolean("error")) {
-                allProducts.clear()
+                val newProducts = mutableListOf<Product>()
                 val array = json.getJSONArray("products")
 
                 for (i in 0 until array.length()) {
@@ -253,7 +265,7 @@ class InventoryFragment : Fragment() {
                     val imgUrl = if (obj.has("image_url") && !obj.isNull("image_url")) obj.getString("image_url") else null
                     val barcode = if (obj.has("barcode") && !obj.isNull("barcode")) obj.getString("barcode") else null
 
-                    allProducts.add(
+                    newProducts.add(
                         Product(
                             id = obj.getInt("id"),
                             name = obj.getString("name"),
@@ -265,22 +277,33 @@ class InventoryFragment : Fragment() {
                             cost_price = obj.getDouble("cost_price"),
                             sale_price = obj.getDouble("sale_price"),
                             supplier = supplier,
-                            image_url = imgUrl
+                            image_url = imgUrl,
+                            is_synced = 1 // Coming from server, so it is synced
                         )
                     )
                 }
 
-                displayedProducts.clear()
-                displayedProducts.addAll(allProducts)
-                adapter.updateData(displayedProducts)
+                // SAVE TO LOCAL DATABASE
+                inventoryDao.insertProducts(newProducts)
 
-                updateDashboardStats()
-                generateCategoryTabs()
-
-            } else {
-                Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show()
+                // UPDATE UI
+                withContext(Dispatchers.Main) {
+                    updateUI(newProducts)
+                }
             }
         } catch (e: Exception) { e.printStackTrace() }
+    }
+
+    private fun updateUI(products: List<Product>) {
+        allProducts.clear()
+        allProducts.addAll(products)
+
+        displayedProducts.clear()
+        displayedProducts.addAll(allProducts)
+        adapter.updateData(displayedProducts)
+
+        updateDashboardStats()
+        generateCategoryTabs()
     }
 
     private fun updateDashboardStats() {
@@ -297,10 +320,8 @@ class InventoryFragment : Fragment() {
             cardLowStockAlert.visibility = View.VISIBLE
             tvLowStockMessage.text = "$lowStockCount product(s) are running low on stock"
 
-            // --- NEW: Trigger Notification from Inventory Fragment ---
-            NotificationHelper.showLowStockNotification(requireContext(), lowStockCount)
-            // ---------------------------------------------------------
-
+            // Only alert if this is a fresh check (optional logic)
+            // NotificationHelper.showLowStockNotification(requireContext(), lowStockCount)
         } else {
             cardLowStockAlert.visibility = View.GONE
         }
@@ -327,15 +348,13 @@ class InventoryFragment : Fragment() {
 
             if (cat == "All Categories") {
                 styleSelectedButton(btn)
-                selectedCategoryButton = btn
+                // selectedCategoryButton = btn
             } else {
                 styleUnselectedButton(btn)
             }
 
             btn.setOnClickListener {
-                selectedCategoryButton?.let { styleUnselectedButton(it) }
-                styleSelectedButton(btn)
-                selectedCategoryButton = btn
+                // styleSelectedButton(btn)
                 filterProductsByCategory(cat)
             }
             llCategoryContainer.addView(btn)

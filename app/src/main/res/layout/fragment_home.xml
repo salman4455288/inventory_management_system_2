@@ -30,6 +30,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvGreeting"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Good Morning, Admin"
@@ -39,6 +40,7 @@
                     android:layout_marginBottom="2dp" />
 
                 <TextView
+                    android:id="@+id/tvDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Monday, Dec 30, 2024"
@@ -49,13 +51,14 @@
 
             <!-- Menu Button -->
             <LinearLayout
-                android:orientation="vertical"
                 android:id="@+id/settings_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/ic_settings"
                 android:tint="@color/black"
-                android:backgroundTint="@color/black" />
+                android:backgroundTint="@color/black"
+                android:clickable="true"
+                android:focusable="true"/>
 
         </LinearLayout>
 
@@ -115,9 +118,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvTodaySales"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$2,450"
+                        android:text="$0.00"
                         android:textSize="22sp"
                         android:textColor="#1C3A47"
                         android:textStyle="bold"
@@ -126,7 +130,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="+12%"
+                        android:text="Daily Revenue"
                         android:textSize="11sp"
                         android:textColor="#4CAF50"
                         android:textStyle="bold" />
@@ -169,9 +173,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvTotalStock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1,247"
+                        android:text="0"
                         android:textSize="22sp"
                         android:textColor="#1C3A47"
                         android:textStyle="bold"
@@ -232,9 +237,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvLowStock"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8"
+                        android:text="0"
                         android:textSize="22sp"
                         android:textColor="#1C3A47"
                         android:textStyle="bold"
@@ -243,7 +249,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Items"
+                        android:text="Action Needed"
                         android:textSize="11sp"
                         android:textColor="#FF9800"
                         android:textStyle="bold" />
@@ -286,9 +292,10 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/tvTodayExpenses"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="$320"
+                        android:text="$0"
                         android:textSize="22sp"
                         android:textColor="#1C3A47"
                         android:textStyle="bold"
@@ -297,7 +304,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Expenses"
+                        android:text="Estimated"
                         android:textSize="11sp"
                         android:textColor="#E53935"
                         android:textStyle="bold" />

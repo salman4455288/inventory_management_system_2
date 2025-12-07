@@ -13,9 +13,14 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
+import androidx.work.Constraints // Import WorkManager
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.inventorymanagement.R
 import com.example.inventorymanagement.fragment.*
 import com.example.inventorymanagement.util.NotificationHelper
+import com.example.inventorymanagement.worker.SyncWorker // Import SyncWorker
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,16 +30,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navCustomers: LinearLayout
     private lateinit var navReports: LinearLayout
 
-    // --- 1. PERMISSION LAUNCHER ---
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // Permission granted, notifications will work
-        } else {
-            // Permission denied
-        }
-    }
+    ) { isGranted: Boolean -> }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,10 +44,19 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        // Initialize Channels
         NotificationHelper.createNotificationChannels(this)
 
-        // --- 2. ASK FOR PERMISSION (ANDROID 13+) ---
+        // --- NEW: TRIGGER OFFLINE SYNC ON STARTUP ---
+        // This ensures any data saved while offline gets uploaded now
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+        val syncRequest = OneTimeWorkRequest.Builder(SyncWorker::class.java)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance(this).enqueue(syncRequest)
+        // ---------------------------------------------
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
                 PackageManager.PERMISSION_GRANTED) {
@@ -57,59 +64,32 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Initialize views
         navHome = findViewById(R.id.nav_home)
         navPos = findViewById(R.id.nav_pos)
         navInventory = findViewById(R.id.nav_inventory)
         navCustomers = findViewById(R.id.nav_customers)
         navReports = findViewById(R.id.nav_reports)
 
-        // --- 3. LIFECYCLE CHECK (CRITICAL FOR CAMERA) ---
-        // Only load HomeFragment if this is a fresh start.
-        // If coming back from Camera (savedInstanceState != null), do NOTHING.
         if (savedInstanceState == null) {
             loadFragment(HomeFragment())
             highlightTab(navHome)
         }
 
-        // Handle navigation clicks
-        navHome.setOnClickListener {
-            loadFragment(HomeFragment())
-            highlightTab(navHome)
-        }
-        navPos.setOnClickListener {
-            loadFragment(PosFragment())
-            highlightTab(navPos)
-        }
-        navInventory.setOnClickListener {
-            loadFragment(InventoryFragment())
-            highlightTab(navInventory)
-        }
-        navCustomers.setOnClickListener {
-            loadFragment(CustomersFragment())
-            highlightTab(navCustomers)
-        }
-        navReports.setOnClickListener {
-            loadFragment(ReportsFragment())
-            highlightTab(navReports)
-        }
+        navHome.setOnClickListener { loadFragment(HomeFragment()); highlightTab(navHome) }
+        navPos.setOnClickListener { loadFragment(PosFragment()); highlightTab(navPos) }
+        navInventory.setOnClickListener { loadFragment(InventoryFragment()); highlightTab(navInventory) }
+        navCustomers.setOnClickListener { loadFragment(CustomersFragment()); highlightTab(navCustomers) }
+        navReports.setOnClickListener { loadFragment(ReportsFragment()); highlightTab(navReports) }
     }
 
-    // Change to 'public' so fragments can access it
     public fun loadFragment(fragment: Fragment) {
-        // OPTIMIZATION: Check if the fragment is already currently displayed.
-        // This prevents reloading the same fragment (and wasting memory) if the user taps the same tab twice.
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
-        if (currentFragment != null && currentFragment::class.java == fragment::class.java) {
-            return
-        }
-
+        if (currentFragment != null && currentFragment::class.java == fragment::class.java) return
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 
-    // Change to 'public' so fragments can access it
     public fun highlightTab(navId: Int) {
         val selectedLayout = when(navId) {
             R.id.nav_home -> navHome
@@ -130,7 +110,6 @@ class MainActivity : AppCompatActivity() {
         navItems.forEach { item ->
             val icon = item.getChildAt(0) as ImageView
             val label = item.getChildAt(1) as TextView
-
             if (item == selected) {
                 icon.setColorFilter(activeColor)
                 label.setTextColor(activeColor)

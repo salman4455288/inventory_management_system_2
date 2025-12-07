@@ -1,17 +1,18 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("kotlin-kapt") // Correct Kotlin DSL syntax for Kapt
+    // FIX: Updated KSP version to match Kotlin 2.0.21 exactly
+    id("com.google.devtools.ksp") version "2.0.21-1.0.27"
 }
 
 android {
     namespace = "com.example.inventorymanagement"
-    compileSdk = 34 // Checked: 34 or 35 is standard. 36 might be preview. Ensure this matches your SDK manager.
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.inventorymanagement"
         minSdk = 24
-        targetSdk = 34 // Ensure this matches compileSdk
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -28,7 +29,7 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8 // Usually 1.8 for Android
+        sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
@@ -37,12 +38,14 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.work.runtime.ktx)
+
     // Room Database
-    val room_version = "2.6.1" // Use 'val' for Kotlin DSL
+    val room_version = "2.6.1"
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    // CHANGED: Use add() instead of kapt() to resolve the reference error
-    add("kapt", "androidx.room:room-compiler:$room_version")
+    // KSP for Room
+    add("ksp", "androidx.room:room-compiler:$room_version")
 
     // External Libs
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
