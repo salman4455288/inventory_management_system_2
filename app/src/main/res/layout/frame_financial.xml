@@ -5,34 +5,21 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!-- 3 Mini Cards -->
-    <LinearLayout
+    <!-- 4 Mini Cards -->
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:baselineAligned="false"
-        android:layout_marginBottom="16dp">
-        <include layout="@layout/card_stat_inventory"
-            android:id="@+id/cardInvTotal"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginEnd="6dp"/>
-        <include layout="@layout/card_stat_inventory"
-            android:id="@+id/cardInvLow" android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="2"
+        android:useDefaultMargins="true"
+        android:layout_marginBottom="12dp">
+        <include layout="@layout/card_report_metric" android:id="@+id/cardFinRevenue" android:layout_width="0dp" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:layout_marginEnd="4dp"/>
+        <include layout="@layout/card_report_metric" android:id="@+id/cardFinExpense" android:layout_width="0dp" android:layout_columnWeight="1" android:layout_marginBottom="8dp" android:layout_marginStart="4dp"/>
+        <include layout="@layout/card_report_metric" android:id="@+id/cardFinProfit" android:layout_width="0dp" android:layout_columnWeight="1" android:layout_marginEnd="4dp"/>
+        <include layout="@layout/card_report_metric" android:id="@+id/cardFinMargin" android:layout_width="0dp" android:layout_columnWeight="1" android:layout_marginStart="4dp"/>
+    </GridLayout>
 
-            android:layout_weight="1"
-            android:layout_marginHorizontal="6dp"/>
-        <include layout="@layout/card_stat_inventory"
-            android:id="@+id/cardInvValue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="6dp"/>
-    </LinearLayout>
-
-    <!-- Stock Levels -->
+    <!-- Profit Trend -->
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,19 +31,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- FIXED: Added layout_width and layout_height -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stock Levels"
+                android:text="Profit Trend"
                 android:textStyle="bold"
                 android:textColor="#000"
                 android:textSize="16sp"
                 android:layout_marginBottom="12dp"/>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerStockLevels"
+                android:id="@+id/recyclerProfitTrend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"/>

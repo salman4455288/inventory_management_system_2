@@ -5,7 +5,9 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
 import android.text.InputType
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +25,7 @@ import com.example.inventorymanagement.activity.AddProductActivity
 import com.example.inventorymanagement.adapter.InventoryAdapter
 import com.example.inventorymanagement.dataclass.Product
 import com.example.inventorymanagement.util.BaseURL
+import com.example.inventorymanagement.util.NotificationHelper // Import NotificationHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,6 +57,9 @@ class InventoryFragment : Fragment() {
     private lateinit var tvLowStockMessage: TextView
     private lateinit var llCategoryContainer: LinearLayout
 
+    // Search
+    private lateinit var etSearchBar: EditText
+
     // Track selected filter button
     private var selectedCategoryButton: Button? = null
 
@@ -68,15 +74,17 @@ class InventoryFragment : Fragment() {
         // Setup Recycler
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        // --- INITIALIZE ADAPTER WITH EDIT CLICK LISTENER ---
-        // When user clicks the "Pencil" icon, this block runs
+        // Initialize Adapter
         adapter = InventoryAdapter(displayedProducts) { product ->
             showUpdateStockDialog(product)
         }
         recyclerView.adapter = adapter
 
+        setupSearchBar()
+
         // Add Product Button Logic
-        val btnAddProduct = view.findViewById<LinearLayout>(R.id.btnAddProduct)
+        // FIXED: Changed <LinearLayout> to <View> because it is a MaterialCardView in XML
+        val btnAddProduct = view.findViewById<View>(R.id.btnAddProduct)
         btnAddProduct.setOnClickListener {
             val intent = Intent(context, AddProductActivity::class.java)
             startActivity(intent)
@@ -93,26 +101,56 @@ class InventoryFragment : Fragment() {
         tvLowStockMessage = view.findViewById(R.id.tvLowStockMessage)
         llCategoryContainer = view.findViewById(R.id.llCategoryContainer)
         recyclerView = view.findViewById(R.id.recyclerInventory)
+        etSearchBar = view.findViewById(R.id.searchBar)
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh data whenever the screen appears (e.g. coming back from Add Product)
+        // Refresh data whenever the screen appears
         fetchProducts()
     }
 
-    // --- 1. SHOW POPUP DIALOG ---
+    // --- SEARCH LOGIC ---
+    private fun setupSearchBar() {
+        etSearchBar.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterListByQuery(s.toString().trim())
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    private fun filterListByQuery(query: String) {
+        displayedProducts.clear()
+        if (query.isEmpty()) {
+            displayedProducts.addAll(allProducts)
+        } else {
+            // Deselect category tabs when searching
+            // (Assuming style logic handled in generateCategoryTabs click listener)
+
+            val lowerCaseQuery = query.lowercase()
+            val filteredList = allProducts.filter { product ->
+                product.name.lowercase().contains(lowerCaseQuery) ||
+                        (product.barcode != null && product.barcode.contains(lowerCaseQuery)) ||
+                        product.category.lowercase().contains(lowerCaseQuery) ||
+                        (product.supplier?.lowercase()?.contains(lowerCaseQuery) == true)
+            }
+            displayedProducts.addAll(filteredList)
+        }
+        adapter.updateData(displayedProducts)
+    }
+
+    // --- DIALOGS ---
     private fun showUpdateStockDialog(product: Product) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Update Stock: ${product.name}")
 
-        // Create Input Field
         val input = EditText(requireContext())
         input.inputType = InputType.TYPE_CLASS_NUMBER
         input.hint = "Enter new quantity"
-        input.setText(product.stock_qty.toString()) // Pre-fill with current stock
+        input.setText(product.stock_qty.toString())
 
-        // Add padding around the input
         val container = android.widget.FrameLayout(requireContext())
         val params = android.widget.FrameLayout.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -124,14 +162,10 @@ class InventoryFragment : Fragment() {
 
         builder.setView(container)
 
-        // Buttons
         builder.setPositiveButton("Update") { _, _ ->
             val newQtyStr = input.text.toString().trim()
             if (newQtyStr.isNotEmpty()) {
-                val newQty = newQtyStr.toInt()
-                // Call API to update database
-                updateStockInServer(product.id, newQty)
-                Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+                updateStockInServer(product.id, newQtyStr.toInt())
             } else {
                 Toast.makeText(context, "Quantity cannot be empty", Toast.LENGTH_SHORT).show()
             }
@@ -140,7 +174,7 @@ class InventoryFragment : Fragment() {
         builder.show()
     }
 
-    // --- 2. CALL PHP API TO UPDATE ---
+    // --- API CALLS ---
     private fun updateStockInServer(productId: Int, newStock: Int) {
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val apiToken = sharedPref.getString("api_token", "") ?: ""
@@ -155,11 +189,8 @@ class InventoryFragment : Fragment() {
                 val conn = url.openConnection() as HttpURLConnection
                 conn.requestMethod = "POST"
                 conn.doOutput = true
-
                 val writer = OutputStreamWriter(conn.outputStream)
-                writer.write(postData)
-                writer.flush()
-                writer.close()
+                writer.write(postData); writer.flush(); writer.close()
 
                 val reader = BufferedReader(InputStreamReader(conn.inputStream))
                 val response = reader.readText()
@@ -170,24 +201,18 @@ class InventoryFragment : Fragment() {
                         val json = JSONObject(response)
                         if (!json.getBoolean("error")) {
                             Toast.makeText(context, "Stock Updated Successfully!", Toast.LENGTH_SHORT).show()
-                            // Refresh list to update UI and Low Stock Stats
                             fetchProducts()
                         } else {
                             Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show()
                         }
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                    } catch (e: Exception) { e.printStackTrace() }
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show()
-                }
+                withContext(Dispatchers.Main) { Toast.makeText(context, "Network Error", Toast.LENGTH_SHORT).show() }
             }
         }
     }
 
-    // --- 3. FETCH ALL PRODUCTS ---
     private fun fetchProducts() {
         val sharedPref = requireActivity().getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val apiToken = sharedPref.getString("api_token", "") ?: ""
@@ -200,12 +225,9 @@ class InventoryFragment : Fragment() {
                 val postData = "api_token=" + URLEncoder.encode(apiToken, "UTF-8")
 
                 val conn = url.openConnection() as HttpURLConnection
-                conn.requestMethod = "POST"
-                conn.doOutput = true
+                conn.requestMethod = "POST"; conn.doOutput = true
                 val writer = OutputStreamWriter(conn.outputStream)
-                writer.write(postData)
-                writer.flush()
-                writer.close()
+                writer.write(postData); writer.flush(); writer.close()
 
                 val response = conn.inputStream.bufferedReader().readText()
 
@@ -213,13 +235,10 @@ class InventoryFragment : Fragment() {
                     parseProductResponse(response)
                 }
 
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            } catch (e: Exception) { e.printStackTrace() }
         }
     }
 
-    // --- 4. PARSE DATA & UPDATE DASHBOARD ---
     private fun parseProductResponse(response: String) {
         try {
             val json = JSONObject(response)
@@ -232,12 +251,14 @@ class InventoryFragment : Fragment() {
 
                     val supplier = if (obj.has("supplier") && !obj.isNull("supplier")) obj.getString("supplier") else "N/A"
                     val imgUrl = if (obj.has("image_url") && !obj.isNull("image_url")) obj.getString("image_url") else null
+                    val barcode = if (obj.has("barcode") && !obj.isNull("barcode")) obj.getString("barcode") else null
 
                     allProducts.add(
                         Product(
                             id = obj.getInt("id"),
                             name = obj.getString("name"),
                             sku = obj.getString("sku"),
+                            barcode = barcode,
                             category = obj.getString("category"),
                             stock_qty = obj.getInt("stock_qty"),
                             min_stock = obj.getInt("min_stock"),
@@ -249,22 +270,17 @@ class InventoryFragment : Fragment() {
                     )
                 }
 
-                // Show all products initially
                 displayedProducts.clear()
                 displayedProducts.addAll(allProducts)
                 adapter.updateData(displayedProducts)
 
-                // Update Stats
                 updateDashboardStats()
-                // Update Category Tabs
                 generateCategoryTabs()
 
             } else {
                 Toast.makeText(context, json.getString("message"), Toast.LENGTH_SHORT).show()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        } catch (e: Exception) { e.printStackTrace() }
     }
 
     private fun updateDashboardStats() {
@@ -277,10 +293,14 @@ class InventoryFragment : Fragment() {
         val categoryCount = allProducts.map { it.category }.distinct().count()
         tvTotalCategories.text = categoryCount.toString()
 
-        // Hide/Show Alert Box
         if (lowStockCount > 0) {
             cardLowStockAlert.visibility = View.VISIBLE
             tvLowStockMessage.text = "$lowStockCount product(s) are running low on stock"
+
+            // --- NEW: Trigger Notification from Inventory Fragment ---
+            NotificationHelper.showLowStockNotification(requireContext(), lowStockCount)
+            // ---------------------------------------------------------
+
         } else {
             cardLowStockAlert.visibility = View.GONE
         }

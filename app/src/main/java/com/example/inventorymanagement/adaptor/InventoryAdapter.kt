@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.inventorymanagement.R
 import com.example.inventorymanagement.dataclass.Product
 
-// CHANGED: Added 'onEditClick' callback to the constructor
 class InventoryAdapter(
     private var productList: List<Product>,
     private val onEditClick: (Product) -> Unit
@@ -20,7 +19,8 @@ class InventoryAdapter(
     class InventoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvName: TextView = itemView.findViewById(R.id.tvProductName)
         val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
-        val tvSku: TextView = itemView.findViewById(R.id.tvSku)
+        // CHANGED: Use tvBarcode
+        val tvBarcode: TextView = itemView.findViewById(R.id.tvBarcode)
         val tvCategory: TextView = itemView.findViewById(R.id.tvCategory)
         val tvStock: TextView = itemView.findViewById(R.id.tvStock)
         val tvMin: TextView = itemView.findViewById(R.id.tvMin)
@@ -30,6 +30,7 @@ class InventoryAdapter(
         val tvPercent: TextView = itemView.findViewById(R.id.tvStockPercent)
         val progressBar: ProgressBar = itemView.findViewById(R.id.progressStock)
         val btnEdit: ImageView = itemView.findViewById(R.id.btnEdit)
+        val btnDelete: ImageView = itemView.findViewById(R.id.btnDelete)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InventoryViewHolder {
@@ -42,7 +43,10 @@ class InventoryAdapter(
         val product = productList[position]
 
         holder.tvName.text = product.name
-        holder.tvSku.text = "SKU: ${product.sku}"
+
+        // CHANGED: Display Barcode instead of SKU
+        holder.tvBarcode.text = "Barcode: ${product.barcode ?: "N/A"}"
+
         holder.tvCategory.text = "Category: ${product.category}"
         holder.tvStock.text = "Stock: ${product.stock_qty} units"
         holder.tvMin.text = "Min: ${product.min_stock}"
@@ -50,13 +54,13 @@ class InventoryAdapter(
         holder.tvPrice.text = "Price: $${product.sale_price}"
         holder.tvSupplier.text = "Supplier: ${product.supplier ?: "N/A"}"
 
-        // Stock Status Logic
+        // Status Logic
         if (product.stock_qty <= product.min_stock) {
             holder.tvStatus.text = "Low Stock"
-            holder.tvStatus.setBackgroundColor(Color.parseColor("#E57373")) // Red
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#E57373"))
         } else {
             holder.tvStatus.text = "In Stock"
-            holder.tvStatus.setBackgroundColor(Color.parseColor("#4CAF50")) // Green
+            holder.tvStatus.setBackgroundColor(Color.parseColor("#4CAF50"))
         }
 
         // Progress Bar
@@ -67,9 +71,8 @@ class InventoryAdapter(
         holder.progressBar.progress = displayPercent
         holder.tvPercent.text = "$displayPercent%"
 
-        // --- CLICK LISTENER ---
         holder.btnEdit.setOnClickListener {
-            onEditClick(product) // Pass the product back to the Fragment
+            onEditClick(product)
         }
     }
 

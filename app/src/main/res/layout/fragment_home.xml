@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -48,13 +49,13 @@
 
             <!-- Menu Button -->
             <LinearLayout
+                android:orientation="vertical"
                 android:id="@+id/settings_btn"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@drawable/ic_settings"
                 android:tint="@color/black"
-                android:backgroundTint="@color/black"
-                />
+                android:backgroundTint="@color/black" />
 
         </LinearLayout>
 
@@ -109,7 +110,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/stock_img"
-                            android:background="#4CAF50" />
+                            app:tint="@color/green" />
 
                     </LinearLayout>
 
@@ -163,7 +164,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/package_img"
-                            android:background="#2196F3" />
+                            app:tint="@color/dark_blue" />
 
                     </LinearLayout>
 
@@ -226,7 +227,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/warning_img"
-                            android:background="#FF9800" />
+                            app:tint="@color/warning" />
 
                     </LinearLayout>
 
@@ -280,7 +281,7 @@
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:src="@drawable/money_img"
-                            android:background="#E53935" />
+                            app:tint="@color/red_alert" />
 
                     </LinearLayout>
 
@@ -321,189 +322,258 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:background="@drawable/card_background"
-                android:padding="16dp"
+                android:padding="20dp"
                 android:layout_marginBottom="20dp"
-                android:elevation="1dp">
+                android:elevation="2dp">
 
-                <!-- First Row -->
+                <!-- FIRST ROW -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="24dp"
+                    android:baselineAligned="false">
 
                     <!-- POS Button -->
                     <LinearLayout
+                        android:id="@+id/btn_pos"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/pos_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/pos_img"
-                            android:background="#4CAF50"
-                            android:layout_marginBottom="8dp"
-                            tools:ignore="DuplicateIds" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#00A63E"> <!-- Green -->
+
+                            <ImageView
+                                android:id="@+id/pos_img"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/pos_img"
+                                app:tint="#FFFFFF" /> <!-- Auto-tint icon white -->
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="POS"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                     <!-- Inventory Button -->
                     <LinearLayout
+                        android:id="@+id/btn_inventory"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/package_img2"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/package_img"
-                            android:background="#2196F3"
-                            android:layout_marginBottom="8dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#155DFC"> <!-- Blue Logo -->
+
+                            <ImageView
+                                android:id="@+id/package_img2"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/package_img"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Inventory"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                     <!-- Customers Button -->
                     <LinearLayout
+                        android:id="@+id/btn_customers"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/customer_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:background="#9C27B0"
-                            android:layout_marginBottom="8dp"
-                            android:src="@drawable/customer_img"
-                            android:elevation="1dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#AD46FF"> <!-- Purple -->
+
+                            <ImageView
+                                android:id="@+id/customer_img"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/customer_img"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Customers"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Second Row -->
+                <!-- SECOND ROW -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
                     <!-- Suppliers Button -->
                     <LinearLayout
+                        android:id="@+id/btn_suppliers"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/supplier_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/supplier_img"
-                            android:background="#FF9800"
-                            android:layout_marginBottom="8dp"
-                            tools:ignore="DuplicateIds" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#FF6900"> <!-- Warning/Orange -->
+
+                            <ImageView
+                                android:id="@+id/supplier_img"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/supplier_img"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Suppliers"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                     <!-- Reports Button -->
                     <LinearLayout
+                        android:id="@+id/btn_reports"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/report_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/report_img"
-                            android:background="#673AB7"
-                            android:layout_marginBottom="8dp"
-                            tools:ignore="DuplicateIds" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#615FFF"> <!-- Dark Blue -->
+
+                            <ImageView
+                                android:id="@+id/report_img"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/report_img"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Reports"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                     <!-- Expenses Button -->
                     <LinearLayout
+                        android:id="@+id/btn_expenses"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical"
-                        android:gravity="center_horizontal">
+                        android:gravity="center"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground">
 
-                        <ImageView
-                            android:id="@+id/money_img2"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@drawable/money_img"
-                            android:background="#E53935"
-                            android:layout_marginBottom="8dp" />
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            app:cardCornerRadius="18dp"
+                            app:cardElevation="6dp"
+                            app:cardBackgroundColor="#F54A00"> <!-- Red Alert -->
+
+                            <ImageView
+                                android:id="@+id/money_img2"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/money_img"
+                                app:tint="#FFFFFF" />
+                        </androidx.cardview.widget.CardView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Expenses"
-                            android:textSize="12sp"
+                            android:textSize="13sp"
                             android:textColor="#1C3A47"
-                            android:textStyle="bold" />
-
+                            android:textStyle="bold"
+                            android:layout_marginTop="8dp"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
             <!-- Recent Transactions Section -->
             <TextView
                 android:layout_width="wrap_content"

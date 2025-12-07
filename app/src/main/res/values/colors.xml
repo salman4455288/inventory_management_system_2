@@ -19,6 +19,42 @@
     <color name="nav_shadow_light">#33000000</color>   <!-- Light shadow -->
     <color name="nav_shadow_dark">#66000000</color>    <!-- Stronger shadow -->
 
+    <color name="green">#00A63E</color>    <!-- Stronger shadow -->
+    <color name="blue_logo">#155DFC</color>    <!-- Stronger shadow -->
+    <color name="red_alert">#F54A00</color>    <!-- Stronger shadow -->
+    <color name="warning">#FF6900</color>    <!-- Stronger shadow -->
+    <color name="dark_blue">#615FFF</color>    <!-- Stronger shadow -->
+    <color name="purple">#AD46FF</color>    <!-- Stronger shadow -->
+
+
+
+
+    <!-- Base Theme Colors -->
+    <color name="bg_app">#F4F7FE</color> <!-- Very light blue-grey, cleaner than basic white -->
+<!--    <color name="white">#FFFFFF</color>-->
+    <color name="text_primary">#2B3674</color> <!-- Deep Navy for main text (Professional) -->
+    <color name="text_secondary">#A3AED0</color> <!-- Soft Blue-Gray for subtitles -->
+
+    <!-- Status Colors -->
+    <color name="success_green">#05CD99</color>
+    <color name="warning_orange">#FFB547</color>
+    <color name="danger_red">#EE5D50</color>
+    <color name="info_blue">#4318FF</color>
+
+    <!-- Professional Dashboard Button Colors (Vibrant but Matte) -->
+    <color name="btn_pos">#00D16C</color>       <!-- Modern Green -->
+    <color name="btn_inventory">#4318FF</color> <!-- Electric Blue -->
+    <color name="btn_customers">#7551FF</color> <!-- Deep Purple -->
+    <color name="btn_suppliers">#FF9E0F</color> <!-- Warm Orange -->
+    <color name="btn_reports">#33C4F8</color>   <!-- Sky Blue -->
+    <color name="btn_expenses">#E31A1A</color>  <!-- Soft Red -->
+
+    <!-- Icon Tints (Light versions for backgrounds) -->
+    <color name="tint_green_light">#E6FDF4</color>
+    <color name="tint_blue_light">#F4F7FE</color>
+    <color name="tint_orange_light">#FFF7E8</color>
+    <color name="tint_red_light">#FEEEEE</color>
+
 
 
 

@@ -1,5 +1,6 @@
 package com.example.inventorymanagement.adaptor
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,17 +9,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.inventorymanagement.R
 import com.example.inventorymanagement.dataclass.Customer
 
-class CustomerAdapter(private val customers: List<Customer>) :
-    RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
+class CustomerAdapter(
+    private var customers: List<Customer>,
+    private val onCustomerClick: (Customer) -> Unit,
+    private val onCallClick: (String) -> Unit,
+    private val onViewBillsClick: (Customer) -> Unit // NEW CALLBACK
+) : RecyclerView.Adapter<CustomerAdapter.CustomerViewHolder>() {
 
     class CustomerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.findViewById<TextView>(R.id.tvCustomerName)
-        val email = itemView.findViewById<TextView>(R.id.tvEmail)
-        val phone = itemView.findViewById<TextView>(R.id.tvPhone)
-        val address = itemView.findViewById<TextView>(R.id.tvAddress)
-        val outstanding = itemView.findViewById<TextView>(R.id.tvOutstanding)
-        val total = itemView.findViewById<TextView>(R.id.tvTotalPurchase)
-        val lastPurchase = itemView.findViewById<TextView>(R.id.tvLastPurchase)
+        val tvInitials: TextView = itemView.findViewById(R.id.tvAvatarInitials)
+        val tvName: TextView = itemView.findViewById(R.id.tvCustomerName)
+        val tvPhone: TextView = itemView.findViewById(R.id.tvPhone)
+        val tvOutstanding: TextView = itemView.findViewById(R.id.tvOutstanding)
+        val cardOutstanding: androidx.cardview.widget.CardView = itemView.findViewById(R.id.cardOutstanding)
+        val tvTotalPurchase: TextView = itemView.findViewById(R.id.tvTotalPurchase)
+        val tvLastPurchase: TextView = itemView.findViewById(R.id.tvLastPurchase)
+        val btnCall: View = itemView.findViewById(R.id.btnCall)
+        val btnViewBills: TextView = itemView.findViewById(R.id.btnViewBills) // New Button
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomerViewHolder {
@@ -28,14 +35,36 @@ class CustomerAdapter(private val customers: List<Customer>) :
 
     override fun onBindViewHolder(holder: CustomerViewHolder, position: Int) {
         val customer = customers[position]
-        holder.name.text = customer.name
-        holder.email.text = customer.email
-        holder.phone.text = customer.phone
-        holder.address.text = customer.address
-        holder.outstanding.text = "Outstanding: $${customer.outstanding}"
-        holder.total.text = "Total: $${customer.totalPurchases}"
-        holder.lastPurchase.text = customer.lastPurchase
+
+        val initials = if (customer.name.isNotBlank()) customer.name.take(1).uppercase() else "?"
+        holder.tvInitials.text = initials
+        holder.tvName.text = customer.name
+        holder.tvPhone.text = customer.phone
+        holder.tvOutstanding.text = String.format("$%.2f", customer.outstanding)
+        holder.tvTotalPurchase.text = String.format("$%.2f", customer.total_purchase)
+        holder.tvLastPurchase.text = customer.last_purchase ?: "New"
+
+        // Dynamic Color Logic
+        if (customer.outstanding < 0) {
+            holder.cardOutstanding.setCardBackgroundColor(Color.parseColor("#FEEEEE")) // Red bg
+            holder.tvOutstanding.setTextColor(Color.parseColor("#EE5D50")) // Red text
+        } else {
+            holder.cardOutstanding.setCardBackgroundColor(Color.parseColor("#E6FDF4")) // Green bg
+            holder.tvOutstanding.setTextColor(Color.parseColor("#05CD99")) // Green text
+        }
+
+        // Click Listeners
+        holder.itemView.setOnClickListener { onCustomerClick(customer) }
+        holder.btnCall.setOnClickListener { onCallClick(customer.phone) }
+
+        // NEW: History Click
+        holder.btnViewBills.setOnClickListener { onViewBillsClick(customer) }
     }
 
     override fun getItemCount() = customers.size
+
+    fun updateList(newList: List<Customer>) {
+        customers = newList
+        notifyDataSetChanged()
+    }
 }

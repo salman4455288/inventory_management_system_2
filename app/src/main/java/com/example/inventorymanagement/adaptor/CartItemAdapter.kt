@@ -9,51 +9,83 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.inventorymanagement.R
 import com.example.inventorymanagement.dataclass.CartItem
 
-class CartItemAdapter(private val cartItems: MutableList<CartItem>) :
-    RecyclerView.Adapter<CartItemAdapter.CartItemViewHolder>() {
+class CartItemAdapter(
+    private val cartItems: MutableList<CartItem>,
+    private val onCartChanged: () -> Unit // Callback when totals need updating
+) : RecyclerView.Adapter<CartItemAdapter.CartViewHolder>() {
 
-    inner class CartItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvItemName: TextView = itemView.findViewById(R.id.tvItemName)
-        val tvItemPrice: TextView = itemView.findViewById(R.id.tvItemPrice)
-        val btnMinus: ImageView = itemView.findViewById(R.id.btnMinus)
-        val tvQuantity: TextView = itemView.findViewById(R.id.tvQuantity)
-        val btnPlus: ImageView = itemView.findViewById(R.id.btnPlus)
+    class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val tvName: TextView = itemView.findViewById(R.id.tvItemName)
+        val tvTotalPrice: TextView = itemView.findViewById(R.id.tvItemPrice)
         val tvUnitPrice: TextView = itemView.findViewById(R.id.tvUnitPrice)
-        val btnEdit: ImageView = itemView.findViewById(R.id.btnEdit)
+        val tvQty: TextView = itemView.findViewById(R.id.tvQuantity)
+
+        val btnPlus: ImageView = itemView.findViewById(R.id.btnPlus)
+        val btnMinus: ImageView = itemView.findViewById(R.id.btnMinus)
         val btnDelete: ImageView = itemView.findViewById(R.id.btnDelete)
+        val btnEdit: ImageView = itemView.findViewById(R.id.btnEdit) // Placeholder for now
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartItemViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_cart, parent, false)
-        return CartItemViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
+        // Inflate the new item_cart layout you provided
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_cart, parent, false)
+        return CartViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: CartItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
         val item = cartItems[position]
 
-        holder.tvItemName.text = item.name
-        holder.tvItemPrice.text = String.format("$%.2f", item.price)
-        holder.tvQuantity.text = item.quantity.toString()
-        holder.tvUnitPrice.text = String.format("$ %.2f", item.unitPrice)
+        // 1. Set Texts
+        holder.tvName.text = item.name
+        holder.tvQty.text = item.quantity.toString()
 
+        // Format Unit Price (e.g., "$ 2.50")
+        holder.tvUnitPrice.text = String.format("$ %.2f", item.price)
+
+        // Format Total Price (e.g., "$ 5.00")
+        holder.tvTotalPrice.text = String.format("$ %.2f", item.total)
+
+        // 2. Plus Button Logic
+        holder.btnPlus.setOnClickListener {
+            item.quantity++
+            item.total = item.price * item.quantity
+            notifyItemChanged(position)
+            onCartChanged()
+        }
+
+        // 3. Minus Button Logic
         holder.btnMinus.setOnClickListener {
             if (item.quantity > 1) {
                 item.quantity--
+                item.total = item.price * item.quantity
                 notifyItemChanged(position)
+                onCartChanged()
+            } else {
+                // If quantity is 1, minus button acts as delete (optional preference)
+                // Or you can just do nothing. Let's act as delete for better UX.
+                removeItem(position)
             }
         }
 
-        holder.btnPlus.setOnClickListener {
-            item.quantity++
-            notifyItemChanged(position)
+        // 4. Delete Button Logic (Specific to your new XML)
+        holder.btnDelete.setOnClickListener {
+            removeItem(position)
         }
 
-        holder.btnDelete.setOnClickListener {
-            cartItems.removeAt(position)
-            notifyItemRemoved(position)
+        // 5. Edit Button Logic (Placeholder)
+        holder.btnEdit.setOnClickListener {
+            // Logic to edit price manually or add discount can go here later
         }
     }
 
-    override fun getItemCount() = cartItems.size
+    private fun removeItem(position: Int) {
+        if (position >= 0 && position < cartItems.size) {
+            cartItems.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, cartItems.size)
+            onCartChanged()
+        }
+    }
+
+    override fun getItemCount(): Int = cartItems.size
 }

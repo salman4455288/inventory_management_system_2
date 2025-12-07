@@ -2,7 +2,10 @@ package com.example.inventorymanagement.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -10,6 +13,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -21,6 +25,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -30,28 +36,35 @@ import java.net.URLEncoder
 class Login : AppCompatActivity() {
 
     private lateinit var BASE_URL: String
+    private var selectedBitmap: Bitmap? = null
+    private lateinit var profileImage: ImageView
+
+    // --- IMAGE PICKER ---
+    private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            profileImage.setImageURI(uri)
+            try {
+                selectedBitmap = MediaStore.Images.Media.getBitmap(contentResolver, uri)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // --- 1. SESSION CHECK (Add this block at the very top) ---
-        // Check if user is already logged in before loading the view
+        // Session Check
         val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
         val token = sharedPref.getString("api_token", null)
-
         if (token != null) {
-            // User has a token, skip login screen
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish() // Close Login activity so they can't go back to it
-            return // Stop the rest of onCreate
+            startActivity(Intent(this, MainActivity::class.java))
+            finish()
+            return
         }
-        // ---------------------------------------------------------
 
         enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-
-        // Initialize Base URL
         BASE_URL = BaseURL.getUrl(this)
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.loginPage)) { v, insets ->
@@ -63,46 +76,48 @@ class Login : AppCompatActivity() {
         // Initialize Views
         val loginCard = findViewById<LinearLayout>(R.id.card_login_container)
         val signupCard = findViewById<LinearLayout>(R.id.card_signup_container)
-
         val tabSignupInactive = findViewById<Button>(R.id.tab_signup_inactive)
         val tabLoginInactive = findViewById<Button>(R.id.tab_login_inactive)
-
         val btnSignIn = findViewById<Button>(R.id.btn_action_signin)
         val btnCreateAccount = findViewById<Button>(R.id.btn_action_create_account)
-        val profileImage = findViewById<ImageView>(R.id.iv_profile_logo)
 
-        // Login Inputs
+        profileImage = findViewById(R.id.iv_profile_logo) // Global variable
+
+        // Inputs
         val loginEmailInput = findViewById<EditText>(R.id.login_email_input)
         val loginPassInput = findViewById<EditText>(R.id.login_password_input)
-
-        // Signup Inputs
         val signupName = findViewById<EditText>(R.id.signup_fullname_input)
         val signupBusiness = findViewById<EditText>(R.id.signup_business_input)
         val signupPhone = findViewById<EditText>(R.id.signup_phone_input)
         val signupEmail = findViewById<EditText>(R.id.signup_email_input)
         val signupPass = findViewById<EditText>(R.id.signup_password_input)
 
+        // --- TAB LOGIC ---
         tabSignupInactive.setOnClickListener {
             loginCard.visibility = View.GONE
             signupCard.visibility = View.VISIBLE
+
+            // Enable Image Upload in Signup Mode
             profileImage.isClickable = true
             profileImage.setOnClickListener {
-                Toast.makeText(this, "Tap to upload profile picture", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Select Profile Picture", Toast.LENGTH_SHORT).show()
+                pickImageLauncher.launch("image/*")
             }
         }
 
         tabLoginInactive.setOnClickListener {
             signupCard.visibility = View.GONE
             loginCard.visibility = View.VISIBLE
+
+            // Disable click in Login Mode
             profileImage.isClickable = false
             profileImage.setOnClickListener(null)
         }
 
-        // --- LOGIN BUTTON ACTION ---
+        // --- BUTTON ACTIONS ---
         btnSignIn.setOnClickListener {
             val emailPhone = loginEmailInput.text.toString().trim()
             val password = loginPassInput.text.toString().trim()
-
             if (emailPhone.isNotEmpty() && password.isNotEmpty()) {
                 performLogin(emailPhone, password)
             } else {
@@ -110,33 +125,35 @@ class Login : AppCompatActivity() {
             }
         }
 
-        // --- SIGNUP BUTTON ACTION ---
         btnCreateAccount.setOnClickListener {
             val name = signupName.text.toString().trim()
-            val business = signupBusiness.text.toString().trim()
+            val bus = signupBusiness.text.toString().trim()
             val phone = signupPhone.text.toString().trim()
             val email = signupEmail.text.toString().trim()
             val pass = signupPass.text.toString().trim()
 
             if (name.isNotEmpty() && phone.isNotEmpty() && email.isNotEmpty() && pass.isNotEmpty()) {
-                performSignup(name, business, phone, email, pass)
+                performSignup(name, bus, phone, email, pass)
             } else {
                 Toast.makeText(this, "Please fill required fields", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
+    // --- SIGNUP (MULTIPART) ---
     private fun performSignup(name: String, bus: String, phone: String, email: String, pass: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val url = URL(BASE_URL + "signup.php")
-                val postData = "full_name=" + URLEncoder.encode(name, "UTF-8") +
-                        "&business_name=" + URLEncoder.encode(bus, "UTF-8") +
-                        "&phone=" + URLEncoder.encode(phone, "UTF-8") +
-                        "&email=" + URLEncoder.encode(email, "UTF-8") +
-                        "&password=" + URLEncoder.encode(pass, "UTF-8")
+                // Prepare params map
+                val params = HashMap<String, String>()
+                params["full_name"] = name
+                params["business_name"] = bus
+                params["phone"] = phone
+                params["email"] = email
+                params["password"] = pass
 
-                val response = sendPostRequest(url, postData)
+                // Use Multipart Request to send Image + Text
+                val response = multipartRequest(BASE_URL + "signup.php", params, selectedBitmap, "image", "profile.jpg")
 
                 withContext(Dispatchers.Main) {
                     handleSignupResponse(response)
@@ -149,6 +166,7 @@ class Login : AppCompatActivity() {
         }
     }
 
+    // --- LOGIN (STANDARD POST) ---
     private fun performLogin(emailPhone: String, pass: String) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -169,35 +187,64 @@ class Login : AppCompatActivity() {
         }
     }
 
+    // --- NETWORKING HELPERS ---
+
     private fun sendPostRequest(url: URL, postData: String): String {
         val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "POST"
         conn.doOutput = true
-        conn.doInput = true
         conn.connectTimeout = 5000
-
         val writer = OutputStreamWriter(conn.outputStream)
         writer.write(postData)
         writer.flush()
         writer.close()
-
-        val reader = BufferedReader(InputStreamReader(conn.inputStream))
-        val response = StringBuilder()
-        var line: String?
-        while (reader.readLine().also { line = it } != null) {
-            response.append(line)
-        }
-        reader.close()
-        return response.toString()
+        return conn.inputStream.bufferedReader().use { it.readText() }
     }
+
+    private fun multipartRequest(urlTo: String, params: Map<String, String>, bitmap: Bitmap?, fileField: String, fileName: String): String {
+        val connection = URL(urlTo).openConnection() as HttpURLConnection
+        val boundary = "*****" + System.currentTimeMillis() + "*****"
+        connection.doInput = true; connection.doOutput = true; connection.useCaches = false
+        connection.requestMethod = "POST"
+        connection.setRequestProperty("Connection", "Keep-Alive")
+        connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
+
+        val outputStream = DataOutputStream(connection.outputStream)
+        val lineEnd = "\r\n"; val twoHyphens = "--"
+
+        // Write Strings
+        for ((key, value) in params) {
+            outputStream.writeBytes(twoHyphens + boundary + lineEnd)
+            outputStream.writeBytes("Content-Disposition: form-data; name=\"$key\"$lineEnd")
+            outputStream.writeBytes(lineEnd)
+            outputStream.write(value.toByteArray(Charsets.UTF_8))
+            outputStream.writeBytes(lineEnd)
+        }
+
+        // Write Image
+        if (bitmap != null) {
+            outputStream.writeBytes(twoHyphens + boundary + lineEnd)
+            outputStream.writeBytes("Content-Disposition: form-data; name=\"$fileField\";filename=\"$fileName\"$lineEnd")
+            outputStream.writeBytes(lineEnd)
+            val baos = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos)
+            outputStream.write(baos.toByteArray())
+            outputStream.writeBytes(lineEnd)
+        }
+
+        outputStream.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd)
+        outputStream.flush(); outputStream.close()
+
+        return connection.inputStream.bufferedReader().use { it.readText() }
+    }
+
+    // --- HANDLERS ---
 
     private fun handleLoginResponse(response: String) {
         try {
             val json = JSONObject(response)
             if (!json.getBoolean("error")) {
                 Toast.makeText(this, "Login Successful!", Toast.LENGTH_SHORT).show()
-
-                // Save User Session
                 val user = json.getJSONObject("user")
                 val sharedPref = getSharedPreferences("UserSession", Context.MODE_PRIVATE)
                 with (sharedPref.edit()) {
@@ -209,9 +256,7 @@ class Login : AppCompatActivity() {
                     }
                     apply()
                 }
-
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
                 Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show()
@@ -228,6 +273,10 @@ class Login : AppCompatActivity() {
                 Toast.makeText(this, "Account Created! Please Login.", Toast.LENGTH_SHORT).show()
                 findViewById<LinearLayout>(R.id.card_signup_container).visibility = View.GONE
                 findViewById<LinearLayout>(R.id.card_login_container).visibility = View.VISIBLE
+
+                // Reset image selection for next user
+                selectedBitmap = null
+                profileImage.setImageResource(R.drawable.ic_launcher_foreground) // Reset to default placeholder
             } else {
                 Toast.makeText(this, json.getString("message"), Toast.LENGTH_SHORT).show()
             }
